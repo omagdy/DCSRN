@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Data stuff
+data/*
+generated_plots/*
+model_checkpoints/*
+
+nohup.out

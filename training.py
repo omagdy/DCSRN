@@ -1,7 +1,10 @@
 import os
 import time
+import datetime
 import numpy as np
 import tensorflow as tf
+from sklearn.utils import shuffle
+
 from model import Generator
 from loss_functions import supervised_loss
 from plotting import generate_images, plot_losses
@@ -26,6 +29,7 @@ def train_step(real_x, real_y, generator_g, generator_optimizer):
 def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA):
 
     print("Began training at "+time.ctime())
+    training_start = time.time()
 
     lr_data = np.load('data/3d_lr_data.npy') # (N, PATCH_SIZE, PATCH_SIZE, PATCH_SIZE, 1)
     hr_data = np.load('data/3d_hr_data.npy') # (N, PATCH_SIZE, PATCH_SIZE, PATCH_SIZE, 1)
@@ -51,6 +55,7 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA):
 
     for epoch in range(EPOCHS):
         print("Began epoch "+str(epoch)+" at "+time.ctime())
+        epoch_start = time.time()
         
         data_x = lr_data[0:N_TRAINING_DATA]
         data_y = hr_data[0:N_TRAINING_DATA]
@@ -70,7 +75,11 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA):
         comparison_image_lr = lr_data[comparison_image]
 
         generate_images(generator_g, comparison_image_lr, comparison_image_hr, PATCH_SIZE, "epoch_"+str(epoch) ," Epoch: "+str(epoch) )
+        
         print("Finished epoch "+str(epoch)+" at "+time.ctime()+". Loss = "+str(generator_loss)+".")
+        epoch_seconds = time.time() - epoch_start
+        print("Epoch took "+str(datetime.timedelta(seconds=epoch_seconds)))
+
         hr_data, lr_data = shuffle(hr_data, lr_data)
 #         if (epoch + 1) % 5 == 0:
 #             save_generator(ckpt_manager, epoch+1)
@@ -79,4 +88,7 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA):
 
     plot_losses(epochs_plot, total_generator_g_error_plot)
     generate_images(generator_g, comparison_image_lr, comparison_image_hr, PATCH_SIZE, "z_final_plot")
+    
     print("Finished training at "+time.ctime())
+    training_seconds = time.time() - training_start
+    print("Training took "+str(datetime.timedelta(seconds=training_seconds)))

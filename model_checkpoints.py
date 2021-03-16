@@ -1,4 +1,5 @@
 import tensorflow as tf
+from model import Generator
 
 def get_generator(PATCH_SIZE, LR_G):
     
