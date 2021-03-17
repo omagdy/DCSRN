@@ -1,6 +1,6 @@
 import logging
 
-logging.basicConfig(filename='training.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(format='%(message)s', filename='training.log', level=logging.INFO)
 
 def log(log):
 	print(log)

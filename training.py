@@ -29,7 +29,7 @@ def train_step(real_x, real_y, generator_g, generator_optimizer, LOSS_FUNC):
 
 def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC):
 
-    begin_log = 'Began training at {} with parameters: Learning Rate={}, Epochs={}, Batch Size={}, Training Data={}, Loss Function={}'.format(time.ctime(), LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC)
+    begin_log = '### Began training at {} with parameters: Learning Rate={}, Epochs={}, Batch Size={}, Training Data={}, Loss Function={}'.format(time.ctime(), LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC)
     log(begin_log)
 
     training_start = time.time()
