@@ -1,5 +1,7 @@
 import os
+import sys
 import time
+import signal
 import datetime
 import numpy as np
 import tensorflow as tf
@@ -11,6 +13,15 @@ from loss_functions import supervised_loss
 from plotting import generate_images, plot_losses
 from data_preparing import get_batch_data
 from model_checkpoints import get_generator, save_generator
+
+
+
+def signal_handler(sig, frame):
+    log('The poor training process is stopped before completing !')
+    save_generator(ckpt_manager, "final_epoch")
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
+
 
 @tf.function
 def train_step(real_x, real_y, generator_g, generator_optimizer, LOSS_FUNC):
@@ -47,6 +58,7 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC):
 
     total  = N_TRAINING_DATA
 
+    global ckpt_manager # For signal handling
     generator_g, generator_optimizer, ckpt_manager = get_generator(PATCH_SIZE, LR_G)
 
     comparison_image    = 900
