@@ -12,7 +12,7 @@ def get_generator(PATCH_SIZE, LR_G):
     ckpt = tf.train.Checkpoint(generator_g=generator_g,
                                generator_optimizer=generator_optimizer)
 
-    ckpt_manager = tf.train.CheckpointManager(ckpt, path, max_to_keep=1)
+    ckpt_manager = tf.train.CheckpointManager(ckpt, path, max_to_keep=3)
 
     # if a checkpoint exists, restore the latest checkpoint.
     if ckpt_manager.latest_checkpoint:

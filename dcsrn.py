@@ -12,6 +12,5 @@ def main():
 	training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC)
 
 
-
 if __name__ == '__main__':
     main()
