@@ -37,9 +37,9 @@ def train_step(real_x, real_y):
     return gen_g_super_loss
 
 
-def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC):
+def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC, EPOCH_START):
 
-    begin_log = '### Began training at {} with parameters: Learning Rate={}, Epochs={}, Batch Size={}, Training Data={}, Loss Function={}'.format(time.ctime(), LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC)
+    begin_log = '### Began training at {} with parameters: Starting Epoch={}, Epochs={}, Batch Size={}, Training Data={}, Learning Rate={}, Loss Function={}'.format(time.ctime(), EPOCH_START, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LR_G, LOSS_FUNC)
     log(begin_log)
 
     training_start = time.time()
@@ -67,7 +67,7 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC):
     epochs_plot = []
     total_generator_g_error_plot = []
 
-    for epoch in range(EPOCHS):
+    for epoch in range(EPOCH_START, EPOCH_START+EPOCHS):
 
         epoch_s_log = "Began epoch "+str(epoch)+" at "+time.ctime()
         log(epoch_s_log)
@@ -81,8 +81,6 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC):
             r = np.random.randint(0,2,3)
             batch_data = get_batch_data(data_x, i, BATCH_SIZE, r[0], r[1], r[2])
             batch_label = get_batch_data(data_y, i, BATCH_SIZE, r[0], r[1], r[2])
-#             batch_data = get_batch_data(data_x, i, BATCH_SIZE)
-#             batch_label = get_batch_data(data_y, i, BATCH_SIZE)
             generator_loss = train_step(batch_data, batch_label).numpy()
 
         epochs_plot.append(epoch)
@@ -104,8 +102,6 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC):
         if (epoch + 1) % 50 == 0:
             save_generator(ckpt_manager, epoch)
             
-    # save_generator(ckpt_manager, "final_epoch")
-
     plot_losses(epochs_plot, total_generator_g_error_plot)
     generate_images(generator_g, comparison_image_lr, comparison_image_hr, PATCH_SIZE, "z_final_plot")
     
