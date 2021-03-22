@@ -16,7 +16,9 @@ from model_checkpoints import get_generator, save_generator
 
 
 def signal_handler(sig, frame):
-    log('The training process was stopped before completing.')
+    stop_log = "The training process was stopped at "+time.ctime()
+    log(stop_log)
+    plot_losses(epochs_plot, total_generator_g_error_plot)
     save_generator(ckpt_manager, "final_epoch")
     sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
@@ -64,6 +66,7 @@ def training_loop(LR_G, EPOCHS, BATCH_SIZE, N_TRAINING_DATA, LOSS_FUNC, EPOCH_ST
 
     generate_images(generator_g, comparison_image_lr, comparison_image_hr, PATCH_SIZE, "a_first_plot")
 
+    global epochs_plot, total_generator_g_error_plot
     epochs_plot = []
     total_generator_g_error_plot = []
 
