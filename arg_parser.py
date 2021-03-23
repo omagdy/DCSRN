@@ -12,6 +12,8 @@ def training_parser():
                          help='Batch Size. Default: "2"')
     parser.add_argument('-ep', '--epochs', action='store', default=1, 
                          type=int, help=('Epochs. Default: 1'))
+    parser.add_argument('-eps', '--epoch_start', action='store', default=0, 
+                         type=int, help=('Starting Epoch. Default: 0'))
     parser.add_argument('-lt', '--loss_type', action='store', default='l2_loss', 
                          type=str, choices=['l1_loss', 'l2_loss'],
                          help=('Loss type, either L1 (MAE) or L2 (MSE). Default: L2'))
